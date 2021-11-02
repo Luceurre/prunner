@@ -1,5 +1,6 @@
 {
     "commands": {
-        "run": "echo Hello, World!"
+        "run": "echo Hello, World!",
+        "touch": "touch touchedFile"
     }
 }

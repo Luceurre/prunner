@@ -71,4 +71,23 @@
                 (let ((project-config (project-runner--load-project-configuration)))
                   (should (equal (project-runner--get-command project-config
                                                               "run") "echo Hello, World!")))))
+
+(ert-deftest run-command/unknown-command
+    ()
+  "Should throw when command is unknown."
+  (with-sandbox (f-mkdir ".git")
+                (given-fixture "valid_prunner.json")
+                (let ((project-config (project-runner--load-project-configuration)))
+                  (should-error (project-runner--run-command project-config
+                                                              "unknownCommand")))))
+
+(ert-deftest run-command/known-command
+    ()
+  "Should run given command when command-name is known."
+  (with-sandbox (f-mkdir ".git")
+                (given-fixture "valid_prunner.json")
+                (let ((project-config (project-runner--load-project-configuration)))
+                  (project-runner--run-command project-config
+                                                             "touch")
+                  (should (equal (f-file? "touchedFile") t)))))
 ;;; project-runner-test.el ends here

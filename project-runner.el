@@ -58,6 +58,11 @@ if DIR is not supplied its set to the current directory by default."
 if there is no command with this name, return nil."
   (gethash command-name (gethash "commands" project-config)))
 
+(defun project-runner--run-command (project-config command-name)
+  "Run command associated to PROJECT_CONFIG and COMMAND_NAME in project root directory."
+  (let ((command (project-runner--get-command project-config command-name)))
+    (projectile-run-shell-command-in-root command)))
+
 (provide 'project-runner)
 
 ;;; project-runner.el ends here
