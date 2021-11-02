@@ -53,6 +53,11 @@ if DIR is not supplied its set to the current directory by default."
   "Return `t' if PROJECT_CONFIG is a valid `prunner' configuration, `nil' otherwise."
   (equal (hash-table-p (gethash "commands" project-config nil)) t))
 
+(defun project-runner--get-command (project-config command-name)
+  "Return command associated to COMMAND_NAME in PROJECT_CONFIG.
+if there is no command with this name, return nil."
+  (gethash command-name (gethash "commands" project-config)))
+
 (provide 'project-runner)
 
 ;;; project-runner.el ends here

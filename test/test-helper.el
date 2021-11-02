@@ -22,6 +22,13 @@
          (expected-hashmap (json-parse-string file-content)))
     (equal 1 1)))
 
+(defun given-fixture (fixture-file)
+  "Copy FIXTURE_FILE from fixtures-path into sandbox-path/prunner.json"
+  (let ((output-file (f-expand "prunner.json" root-sandbox-path)))
+    (when (f-file? output-file)
+      (f-delete output :force))
+    (f-copy (f-expand fixture-file fixtures-path) output-file)))
+
 (defmacro with-sandbox (&rest body)
   "Evaluate BODY in an empty temporary directory."
   `(let ((default-directory root-sandbox-path))
