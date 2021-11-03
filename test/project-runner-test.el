@@ -90,4 +90,11 @@
                   (project-runner--run-command project-config
                                                              "touch")
                   (should (equal (f-file? "touchedFile") t)))))
+
+(ert-deftest init/create-valid-prunner-config
+    ()
+  "Should create a valid prunner config at project root."
+  (with-sandbox (f-mkdir ".git")
+                (project-runner--init)
+                (should (equal (project-runner--is-project-config-valid (project-runner--load-project-configuration)) t))))
 ;;; project-runner-test.el ends here

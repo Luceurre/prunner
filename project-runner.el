@@ -29,6 +29,8 @@
 ;;; Code:
 
 (require 'projectile)
+(require 'f)
+(require 'json)
 
 (defvar project-runner-config-filename "prunner.json")
 
@@ -46,7 +48,7 @@ if DIR is not supplied its set to the current directory by default."
   "Retrieves the configuration file of project if it exists.
 if DIR is not supplied its set to the current directory by default."
   (let ((config-file (project-runner--find-project-configuration dir)))
-    (if (f-file? config-file)
+    (when (f-file? config-file)
         (json-parse-string (f-read-text config-file)))))
 
 (defun project-runner--is-project-config-valid (project-config)
@@ -62,6 +64,16 @@ if there is no command with this name, return nil."
   "Run command associated to PROJECT_CONFIG and COMMAND_NAME in project root directory."
   (let ((command (project-runner--get-command project-config command-name)))
     (projectile-run-shell-command-in-root command)))
+
+(defun project-runner--get-default-config ()
+  "Return a valid default prunner.json hastable."
+  #s(hash-table data ("commands" #s(hash-table))))
+
+(defun project-runner--init (&optional force)
+  "Create a default prunner.json in project root.
+If FORCE is t, override existing prunner.json."
+  (interactive)
+  (f-write-text (json-encode (project-runner--get-default-config)) 'utf-8 (project-runner--find-project-configuration)))
 
 (provide 'project-runner)
 
